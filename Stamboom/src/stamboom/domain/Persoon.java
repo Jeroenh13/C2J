@@ -45,9 +45,8 @@ public class Persoon {
         gebDat = gebdat;
         gebPlaats = StringUtilities.withFirstCapital(gebplaats);
         geslacht = g;
-        this.ouderlijkGezin = ouderlijkGezin;
-        //todo opgave 1
-        throw new UnsupportedOperationException();
+        this.ouderlijkGezin = ouderlijkGezin; 
+        alsOuderBetrokkenIn = null;
     }
 
     // ********methoden****************************************
@@ -87,8 +86,12 @@ public class Persoon {
      * door een punt
      */
     public String getInitialen() {
-        //todo opgave 1
-        return null;
+        StringBuilder initialen = new StringBuilder();
+        for(int i = 0; i < voornamen.length;i++)
+        {
+            initialen.append(voornamen[i].substring(0,1)).append('.');
+        }
+        return initialen.toString();
     }
 
     /**
@@ -98,8 +101,10 @@ public class Persoon {
      * gescheiden door een spatie
      */
     public String getNaam() {
-        //todo opgave 1
-        return null;
+        StringBuilder naam = new StringBuilder();
+        naam.append(getInitialen());
+        naam.append(' ').append(tussenvoegsel).append(' ').append(achternaam);
+        return naam.toString();
     }
 
     /**
@@ -164,8 +169,15 @@ public class Persoon {
      * @return of ouderlijk gezin kon worden toegevoegd
      */
     boolean setOuders(Gezin ouderlijkGezin) {
-        //todo opgave 1
-        return false;
+        if(this.ouderlijkGezin == null)
+        {
+            this.ouderlijkGezin = ouderlijkGezin;
+            this.ouderlijkGezin.breidUitMet(this);
+            return true;
+        }else
+        {
+            return false;
+        }
     }
 
     /**
@@ -216,8 +228,22 @@ public class Persoon {
      * null
      */
     public Gezin heeftOngehuwdGezinMet(Persoon andereOuder) {
-        //todo opgave 1
-        return null;
+        Gezin gezin = null;
+        for(Gezin g : alsOuderBetrokkenIn)
+        {
+            if(g.getOuder2() == andereOuder || g.getOuder1() == andereOuder)
+            {
+                if(g.isOngehuwd())
+                {
+                    gezin = g;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+        return gezin;
     }
 
     /**
