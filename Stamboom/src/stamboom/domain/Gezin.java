@@ -207,13 +207,27 @@ public class Gezin {
         StringBuilder sb = new StringBuilder();
         int gezinsnummer = this.getNr();
         
-        String naam2 = this.ouder2.getNaam();
-        if (this.ouder1 != null)
-        {
-            String naam1 = this.ouder1.getNaam();
             sb.append(gezinsnummer).toString();
-            sb.append(naam1);
-        }
+            String naam1 = this.ouder1.getNaam();
+            sb.append(" " + naam1);
+            if (this.ouder2 != null)
+            {
+                String naam2 = this.ouder2.getNaam();
+                sb.append(" " + naam2);
+            }
+            if (!this.isOngehuwd())
+            {
+                sb.append(" " + this.huwelijksdatum.toString());
+            }
+            if(this.aantalKinderen()>0)
+            {
+                sb.append("; kinderen:");
+                for(Persoon p : kinderen)
+                {
+                    sb.append(" -" + p.getNaam());
+                }
+            }
+        
         String beschrijvingCompleet = sb.toString();
         return beschrijvingCompleet;
     }
