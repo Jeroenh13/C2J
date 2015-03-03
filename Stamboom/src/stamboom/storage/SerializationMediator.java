@@ -8,14 +8,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 import stamboom.domain.Administratie;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SerializationMediator implements IStorageMediator {
 
     /**
      * bevat de bestandslocatie. Properties is een subclasse van HashTable, een
-     * alternatief voor een List. Het verschil is dat een List een volgorde heeft,
-     * en een HashTable een key/value index die wordt opgevraagd niet op basis van
-     * positie, maar op key.
+     * alternatief voor een List. Het verschil is dat een List een volgorde
+     * heeft, en een HashTable een key/value index die wordt opgevraagd niet op
+     * basis van positie, maar op key.
      */
     private Properties props;
 
@@ -28,12 +34,22 @@ public class SerializationMediator implements IStorageMediator {
 
     @Override
     public Administratie load() throws IOException {
+        Administratie a = new Administratie();
         if (!isCorrectlyConfigured()) {
             throw new RuntimeException("Serialization mediator isn't initialized correctly.");
+        } 
+        else {
+            FileInputStream fis = new FileInputStream(props.getProperty("file"));
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            try {
+                a = (Administratie) ois.readObject();
+            } 
+            catch (ClassNotFoundException ex) {
+                Logger.getLogger(SerializationMediator.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
         // todo opgave 2
-        return null;
+        return a;
     }
 
     @Override
@@ -43,12 +59,12 @@ public class SerializationMediator implements IStorageMediator {
         }
 
         // todo opgave 2
-  
     }
 
     /**
-     * Laadt de instellingen, in de vorm van een Properties bestand, en controleert
-     * of deze in de juiste vorm is.
+     * Laadt de instellingen, in de vorm van een Properties bestand, en
+     * controleert of deze in de juiste vorm is.
+     *
      * @param props
      * @return
      */
@@ -64,10 +80,10 @@ public class SerializationMediator implements IStorageMediator {
     }
 
     /**
-     * Controleert of er een geldig Key/Value paar bestaat in de Properties.
-     * De bedoeling is dat er een Key "file" is, en de Value van die Key 
-     * een String representatie van een FilePath is (eg. C:\\Users\Username\test.txt).
-     * 
+     * Controleert of er een geldig Key/Value paar bestaat in de Properties. De
+     * bedoeling is dat er een Key "file" is, en de Value van die Key een String
+     * representatie van een FilePath is (eg. C:\\Users\Username\test.txt).
+     *
      * @return true if config() contains at least a key "file" and the
      * corresponding value is formatted like a file path
      */
@@ -76,7 +92,7 @@ public class SerializationMediator implements IStorageMediator {
         if (props == null) {
             return false;
         }
-        return props.containsKey("file") 
+        return props.containsKey("file")
                 && props.getProperty("file").contains(File.separator);
     }
 }

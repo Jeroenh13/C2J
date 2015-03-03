@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import stamboom.domain.Administratie;
 import stamboom.storage.IStorageMediator;
+import stamboom.storage.SerializationMediator;
 
 public class StamboomController {
 
@@ -20,7 +21,7 @@ public class StamboomController {
      */
     public StamboomController() {
         admin = new Administratie();
-        storageMediator = null;
+        storageMediator = new SerializationMediator();
     }
 
     public Administratie getAdministratie() {
