@@ -213,7 +213,7 @@ public class Gezin {
             if (this.ouder2 != null)
             {
                 String naam2 = this.ouder2.getNaam();
-                sb.append(" " + naam2);
+                sb.append(" met " + naam2);
             }
             if (!this.isOngehuwd())
             {
