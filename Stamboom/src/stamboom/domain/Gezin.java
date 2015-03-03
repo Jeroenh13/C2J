@@ -204,7 +204,18 @@ public class Gezin {
      */
     public String beschrijving() {
         //todo opgave 1
-        return null;
+        StringBuilder sb = new StringBuilder();
+        int gezinsnummer = this.getNr();
+        
+        String naam2 = this.ouder2.getNaam();
+        if (this.ouder1 != null)
+        {
+            String naam1 = this.ouder1.getNaam();
+            sb.append(gezinsnummer).toString();
+            sb.append(naam1);
+        }
+        String beschrijvingCompleet = sb.toString();
+        return beschrijvingCompleet;
     }
 
     /**
