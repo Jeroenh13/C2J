@@ -290,11 +290,23 @@ public class Administratie {
     public Persoon getPersoon(String[] vnamen, String anaam, String tvoegsel,
             Calendar gebdat, String gebplaats) {
         //todo opgave 1
-        
+        StringBuilder init = new StringBuilder();
+        for (String s : vnamen) {
+            init.append(s).append(' ');
+        }
+        String initialen = init.toString().trim();
         
         for(Persoon p :personen)
         {
-            if()
+            if(     (p.getVoornamen() == initialen) &&
+                    (p.getAchternaam()== anaam) && 
+                    (p.getTussenvoegsel()== tvoegsel) && 
+                    (p.getGebDat() == gebdat) &&
+                    (p.getGebPlaats() == gebplaats)
+               )                    
+                    {
+                        return p;
+                    }
         }
         return null;
     }
