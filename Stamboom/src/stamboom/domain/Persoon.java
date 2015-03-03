@@ -293,7 +293,13 @@ public class Persoon {
      * @return true als persoon op datum gescheiden is, anders false
      */
     public boolean isGescheidenOp(Calendar datum) {
-        //todo opgave 1
+        for(Gezin g : alsOuderBetrokkenIn)
+        {
+            if(g.heeftGescheidenOudersOp(datum))
+            {
+                return true;
+            }
+        }
         return false;
     }
 
