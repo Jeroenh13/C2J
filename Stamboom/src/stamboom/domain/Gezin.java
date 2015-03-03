@@ -170,7 +170,30 @@ public class Gezin {
      */
     boolean setHuwelijk(Calendar datum) {
         //todo opgave 1
+        int leeftijdPersoon1 = getLeeftijd(this.ouder1.getGebDat(), datum);
+        int leeftijdPersoon2 = getLeeftijd(this.ouder2.getGebDat(), datum);
+        if (this.huwelijksdatum == null)
+        {
+            if (leeftijdPersoon1 >= 18 && leeftijdPersoon2 >= 18)
+            {
+                this.huwelijksdatum = datum;
+                return true;
+            }
+        }
         return false;
+    }
+    
+    int getLeeftijd(Calendar geboortedatum, Calendar vergelijkingsdatum)
+    {
+        Calendar datum = (Calendar) geboortedatum.clone();
+        long aantalDagen = 0;
+        while (datum.before(vergelijkingsdatum)){
+            datum.add(Calendar.DAY_OF_MONTH, 1);
+            aantalDagen++;
+        }
+        double aantalJaren = aantalDagen / 365;
+        int leeftijd = (int) Math.floor(aantalJaren);
+        return leeftijd;        
     }
 
     /**
