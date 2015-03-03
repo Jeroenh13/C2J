@@ -18,8 +18,10 @@ public class Administratie {
      */
     public Administratie() {
         //todo opgave 1
-        this.personen = null;
-        this.gezinnen = null;
+        this.personen = new ArrayList<>();
+        this.gezinnen = new ArrayList<>();
+        nextGezinsNr = 1;
+        nextPersNr = 1;
     }
 
     //**********************methoden****************************************
@@ -47,6 +49,8 @@ public class Administratie {
     public Persoon addPersoon(Geslacht geslacht, String[] vnamen, String anaam,
             String tvoegsel, Calendar gebdat,
             String gebplaats, Gezin ouderlijkGezin) {
+        
+        
 
         if (vnamen.length == 0) {
             throw new IllegalArgumentException("ten minste 1 voornaam");
@@ -64,9 +68,11 @@ public class Administratie {
         if (gebplaats.trim().isEmpty()) {
             throw new IllegalArgumentException("lege geboorteplaats is niet toegestaan");
         }
+        
+        Persoon persoon = new Persoon(nextPersNr, vnamen, anaam, tvoegsel, gebdat, gebplaats, geslacht,  ouderlijkGezin);
 
         //todo opgave 1
-        return null;
+        return persoon;
     }
 
     /**
@@ -180,7 +186,28 @@ public class Administratie {
      */
     public Gezin addHuwelijk(Persoon ouder1, Persoon ouder2, Calendar huwdatum) {
         //todo opgave 1
-        return null;
+        
+        Gezin hulpgezin = null;
+        
+        for(Gezin g : gezinnen)
+        {
+            if((g.getOuder1() == ouder1 || g.getOuder1() == ouder2) && (g.getOuder2() == ouder1 || g.getOuder2() == ouder2) && (g.isOngehuwd()))
+            {
+                g.setHuwelijk(huwdatum);
+                hulpgezin = g;                
+            }
+            else
+            {
+                Gezin nieuwGezin = new Gezin(nextGezinsNr, ouder1, ouder2);
+                gezinnen.add(nieuwGezin);                
+                nieuwGezin.setHuwelijk(huwdatum);
+                
+                hulpgezin = nieuwGezin;                               
+            }
+        }          
+            return hulpgezin;
+        
+       
     }
 
     /**
@@ -207,7 +234,14 @@ public class Administratie {
      */
     public Persoon getPersoon(int nr) {
         //todo opgave 1
-        //aanname: er worden geen personen verwijderd
+        //aanname: er worden geen personen verwijderd        
+        for(Persoon p : personen)
+        {
+            if(p.getNr() == nr)
+            {
+                return p;
+            }
+        }
         return null;
     }
 
@@ -218,7 +252,18 @@ public class Administratie {
      */
     public ArrayList<Persoon> getPersonenMetAchternaam(String achternaam) {
         //todo opgave 1
-        return null;
+        String geformatteerdeNaam = achternaam.toUpperCase();
+        ArrayList<Persoon> gevondenPersonen = new ArrayList<Persoon>();
+        
+        for(Persoon p : personen)
+        {
+            if(geformatteerdeNaam == p.getAchternaam().toUpperCase())
+            {
+                gevondenPersonen.add(p);
+            }
+        }
+        
+        return gevondenPersonen;
     }
 
     /**
@@ -226,8 +271,9 @@ public class Administratie {
      * @return de geregistreerde personen
      */
     public List<Persoon> getPersonen() {
-        // todo opgave 1
-        return null;
+        // todo opgave 1       
+        
+        return this.personen;
     }
 
     /**
@@ -244,6 +290,24 @@ public class Administratie {
     public Persoon getPersoon(String[] vnamen, String anaam, String tvoegsel,
             Calendar gebdat, String gebplaats) {
         //todo opgave 1
+        StringBuilder init = new StringBuilder();
+        for (String s : vnamen) {
+            init.append(s).append(' ');
+        }
+        String initialen = init.toString().trim();
+        
+        for(Persoon p :personen)
+        {
+            if(     (p.getVoornamen() == initialen) &&
+                    (p.getAchternaam()== anaam) && 
+                    (p.getTussenvoegsel()== tvoegsel) && 
+                    (p.getGebDat() == gebdat) &&
+                    (p.getGebPlaats() == gebplaats)
+               )                    
+                    {
+                        return p;
+                    }
+        }
         return null;
     }
 
