@@ -168,8 +168,6 @@ public class DomeinTest extends TestCase{
         Persoon mark = adm.addPersoon(Geslacht.MAN, new String[]{"Markus", "  Anna   "}, " sWinkelS  ",
                 "", new GregorianCalendar(1986, Calendar.APRIL, 13), "venLO",
                 pietEnTeuntje);
-        String s1 = pietEnTeuntje.beschrijving();
-        String s2 = pietEnTeuntje.toString() + "; kinderen: -Markus Anna";
         assertEquals("beschrijving gezin onjuist",
                 pietEnTeuntje.toString() + "; kinderen: -Markus Anna",
                 pietEnTeuntje.beschrijving());

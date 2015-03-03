@@ -212,7 +212,6 @@ public class Gezin {
             sb.append(naam1);
             if (this.ouder2 != null)
             {
-                sb.append(" met ");
                 String naam2 = this.ouder2.getNaam();
                 sb.append(" met " + naam2);
             }

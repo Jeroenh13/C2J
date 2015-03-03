@@ -371,7 +371,15 @@ public class Administratie {
         {
             naam.append(vnamen[i].substring(0,1).toUpperCase()).append('.');
         }
-        naam.append(tvoegsel.toUpperCase()).append(' ').append(anaam.toUpperCase()).append(gebplaats.toUpperCase()).append(gebdat);
+        if(tvoegsel == "")
+        {
+            naam.append(tvoegsel.toUpperCase()).append(' ').append(anaam.toUpperCase()).append(gebplaats.toUpperCase()).append(gebdat);
+        }
+        else
+        {
+             naam.append(' ').append(tvoegsel.toUpperCase()).append(' ').append(anaam.toUpperCase()).append(gebplaats.toUpperCase()).append(gebdat);
+        }
+       
         
         for(Persoon p :personen)
         {
