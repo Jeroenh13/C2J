@@ -34,19 +34,18 @@ public class Persoon {
     Persoon(int persNr, String[] vnamen, String anaam, String tvoegsel,
             Calendar gebdat, String gebplaats, Geslacht g, Gezin ouderlijkGezin) {
         nr = persNr;
-        String[] capNamen;
         for(int i = 0; i < vnamen.length; i++)
         {
-            vnamen[i] = StringUtilities.withFirstCapital(vnamen[i]);
+            vnamen[i] = StringUtilities.withFirstCapital(vnamen[i]).trim();
         }
         voornamen = vnamen;
-        achternaam = StringUtilities.withFirstCapital(anaam);
-        tussenvoegsel = tvoegsel.toLowerCase();
+        achternaam = StringUtilities.withFirstCapital(anaam).trim();
+        tussenvoegsel = tvoegsel.toLowerCase().trim();
         gebDat = gebdat;
-        gebPlaats = StringUtilities.withFirstCapital(gebplaats);
+        gebPlaats = StringUtilities.withFirstCapital(gebplaats).trim();
         geslacht = g;
         this.ouderlijkGezin = ouderlijkGezin; 
-        alsOuderBetrokkenIn = null;
+        alsOuderBetrokkenIn = new ArrayList<>();
     }
 
     // ********methoden****************************************
@@ -103,7 +102,14 @@ public class Persoon {
     public String getNaam() {
         StringBuilder naam = new StringBuilder();
         naam.append(getInitialen());
-        naam.append(' ').append(tussenvoegsel).append(' ').append(achternaam);
+        if(tussenvoegsel.equals(""))
+        {
+            naam.append(tussenvoegsel).append(' ').append(achternaam);
+        }
+        else
+        {
+            naam.append(' ').append(tussenvoegsel).append(' ').append(achternaam);
+        }
         return naam.toString();
     }
 
@@ -135,7 +141,7 @@ public class Persoon {
     public String getVoornamen() {
         StringBuilder init = new StringBuilder();
         for (String s : voornamen) {
-            init.append(s).append(' ');
+            init.append(StringUtilities.withFirstCapital(s)).append(' ');
         }
         return init.toString().trim();
     }
@@ -240,7 +246,7 @@ public class Persoon {
             }
             else
             {
-                return null;
+                gezin = null;
             }
         }
         return gezin;
@@ -252,6 +258,10 @@ public class Persoon {
      * @return true als persoon op datum getrouwd is, anders false
      */
     public boolean isGetrouwdOp(Calendar datum) {
+        if(alsOuderBetrokkenIn.isEmpty())
+        {
+            return false;
+        }
         for (Gezin gezin : alsOuderBetrokkenIn) {
             if (gezin.heeftGetrouwdeOudersOp(datum)) {
                 return true;
