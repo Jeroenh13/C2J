@@ -284,7 +284,14 @@ public class Gezin {
      * de ouders hierna gingen/gaan scheiden.
      */
     public boolean isHuwelijkOp(Calendar datum) {
-        //todo opgave 1
+        if (this.huwelijksdatum != null)
+        {
+           Calendar datumGehuwd = this.huwelijksdatum;
+           if (datumGehuwd.before(datum) || datumGehuwd == datum)
+           {
+               return true;
+           }
+        }
         return false;
     }
 
@@ -303,6 +310,14 @@ public class Gezin {
      */
     public boolean heeftGescheidenOudersOp(Calendar datum) {
         //todo opgave 1
+        if (this.scheidingsdatum != null)
+        {
+           Calendar datumGescheiden = this.scheidingsdatum;
+           if (datumGescheiden.before(datum) || datumGescheiden == datum)
+           {
+               return true;
+           }
+        }
         return false;
     }
 }
