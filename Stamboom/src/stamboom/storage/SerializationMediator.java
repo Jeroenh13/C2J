@@ -31,7 +31,14 @@ public class SerializationMediator implements IStorageMediator {
         if (!isCorrectlyConfigured()) {
             throw new RuntimeException("Serialization mediator isn't initialized correctly.");
         }
-        
+        else
+        {
+            
+            //addpersoon
+            //addhuwelijk
+            //hoogste persoonsnummber
+            //hoogste 
+        }
         // todo opgave 2
         return null;
     }
