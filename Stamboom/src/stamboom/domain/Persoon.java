@@ -323,7 +323,29 @@ public class Persoon {
      */
     public int afmetingStamboom() {
         //todo opgave 2
-        return -1;
+        int stamboomgrootte = 1;
+        int ouder1 = 0;
+        int ouder2 = 0;
+        if(oudersBekend(this))
+        {
+            if(this.ouderlijkGezin.getOuder2()!= null)
+            {
+               ouder2 = this.ouderlijkGezin.getOuder2().afmetingStamboom();
+            }
+            ouder1 = this.ouderlijkGezin.getOuder1().afmetingStamboom();
+        }
+        stamboomgrootte = stamboomgrootte + ouder1 + ouder2;
+        
+        return stamboomgrootte;
+    }
+    
+    boolean oudersBekend(Persoon p)
+    {
+        if(p.getOuderlijkGezin()!= null)
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -364,9 +386,20 @@ public class Persoon {
      * __J.A. Pieterse (MAN) 23-6-1964<br>
      * ____M.A.C. Hagel (VROUW) 12-0-1943<br>
      * ____J.A. Pieterse (MAN) 4-8-1923<br>
-     */
+     */    
     public String stamboomAlsString() {
         StringBuilder builder = new StringBuilder();
+        builder = builder.append(this.getNaam()).append(' ').append(this.getGeslacht());
+        if(oudersBekend(this))
+        {
+            builder.append("\r\n").append("__");
+            builder.append(this.ouderlijkGezin.getOuder1().stamboomAlsString());
+            if(this.ouderlijkGezin.getOuder2()!= null)
+            {
+               builder.append("\r\n").append("  ");
+               builder.append(this.ouderlijkGezin.getOuder2().stamboomAlsString());
+            }
+        }
         //todo opgave 2
 
         return builder.toString();
