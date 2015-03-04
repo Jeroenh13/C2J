@@ -392,7 +392,7 @@ public class Persoon {
         builder = builder.append(this.getNaam()).append(' ').append(this.getGeslacht());
         if(oudersBekend(this))
         {
-            builder.append("\r\n").append("__");
+            builder.append("\r\n").append("  ");
             builder.append(this.ouderlijkGezin.getOuder1().stamboomAlsString());
             if(this.ouderlijkGezin.getOuder2()!= null)
             {
