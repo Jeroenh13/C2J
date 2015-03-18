@@ -86,9 +86,8 @@ public class Persoon {
      */
     public String getInitialen() {
         StringBuilder initialen = new StringBuilder();
-        for(int i = 0; i < voornamen.length;i++)
-        {
-            initialen.append(voornamen[i].substring(0,1)).append('.');
+        for (String voornaam : voornamen) {
+            initialen.append(voornaam.substring(0, 1)).append('.');
         }
         return initialen.toString();
     }
@@ -339,13 +338,14 @@ public class Persoon {
         return stamboomgrootte;
     }
     
+    /**
+     * returnt true als het ouderlijk gezin bekend is
+     * @param p de persoon
+     * @return 
+     */
     boolean oudersBekend(Persoon p)
     {
-        if(p.getOuderlijkGezin()!= null)
-        {
-            return true;
-        }
-        return false;
+        return p.getOuderlijkGezin()!= null;
     }
 
     /**
@@ -362,6 +362,15 @@ public class Persoon {
      */
     void voegJouwStamboomToe(ArrayList<PersoonMetGeneratie> lijst, int g) {
         //todo opgave 2
+        lijst.add(new PersoonMetGeneratie(this.standaardgegevens(), g));
+        if(oudersBekend(this))
+        {
+            this.ouderlijkGezin.getOuder1().voegJouwStamboomToe(lijst, g+1);
+            if(this.ouderlijkGezin.getOuder2()!= null)
+            {
+                this.ouderlijkGezin.getOuder2().voegJouwStamboomToe(lijst, g+1);
+            }
+        }
     }
 
     /**
@@ -389,16 +398,17 @@ public class Persoon {
      */    
     public String stamboomAlsString() {
         StringBuilder builder = new StringBuilder();
-        builder = builder.append(this.getNaam()).append(' ').append(this.getGeslacht());
-        if(oudersBekend(this))
+        ArrayList<PersoonMetGeneratie> lijst = new ArrayList<>();
+        voegJouwStamboomToe(lijst,0);
+        for(PersoonMetGeneratie pgm : lijst)
         {
-            builder.append("\r\n").append("  ");
-            builder.append(this.ouderlijkGezin.getOuder1().stamboomAlsString());
-            if(this.ouderlijkGezin.getOuder2()!= null)
+            int i = 0;
+            while(i<pgm.getGeneratie())
             {
-               builder.append("\r\n").append("  ");
-               builder.append(this.ouderlijkGezin.getOuder2().stamboomAlsString());
+                builder = builder.append("  ");
+                i++;
             }
+            builder = builder.append(pgm.getPersoonsgegevens()).append("\r\n");
         }
         //todo opgave 2
 
