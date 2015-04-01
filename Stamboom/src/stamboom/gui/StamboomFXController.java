@@ -9,20 +9,16 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import stamboom.controller.StamboomController;
-import stamboom.domain.Administratie;
 import stamboom.domain.Geslacht;
 import stamboom.domain.Gezin;
 import stamboom.domain.Persoon;
@@ -97,11 +93,11 @@ public class StamboomFXController extends StamboomController implements Initiali
     }
 
     private void initComboboxes() {
-        cbPersonen.setItems(getAdministratie().getPersonen());
         cbOuderlijkGezin.setItems(getAdministratie().getGezinnen());
         cbKiesGezin.setItems(getAdministratie().getGezinnen());
         cbOuder1Invoer.setItems(getAdministratie().getPersonen());
         cbOuder2Invoer.setItems(getAdministratie().getPersonen());
+        cbPersonen.setItems(getAdministratie().getPersonen());
         cbAddOuderlijkGezin.setItems(getAdministratie().getGezinnen());
     }
 
@@ -147,7 +143,6 @@ public class StamboomFXController extends StamboomController implements Initiali
             showDialog("Success", ouderlijkGezin.toString()
                 + " is nu het ouderlijk gezin van " + p.getNaam());
         }
-        
     }
 
     public void selectGezin(Event evt) {
@@ -192,6 +187,7 @@ public class StamboomFXController extends StamboomController implements Initiali
         Gezin g = (Gezin)cbAddOuderlijkGezin.getSelectionModel().getSelectedItem();
         getAdministratie().addPersoon(cbSelected, vnamen, tfAddAchternaam.getText(), tfAddTussenVoegsel.getText(), c, tfAddGebPlaats.getText(), g);        
         clearTabPersoonInvoer();
+        initComboboxes();
     }
     
 
