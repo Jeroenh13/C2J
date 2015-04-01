@@ -171,7 +171,42 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     public void okPersoonInvoer(Event evt) {
         String vn = tfAddVoornamen.getText();
-        String[] vnamen = vn.split("\\s+");
+        String an = tfAddAchternaam.getText();
+        String tv = tfAddTussenVoegsel.getText();
+        String wp = tfAddGebPlaats.getText();
+        String[] vnamen;
+        
+        if(!vn.matches("[a-zA-Z\\s]+"))
+        {
+            showDialog("Warning", "Voornaam is foutief ingevoerd");
+            return;
+        }
+        else
+        {
+            vnamen = vn.split("\\s+");
+            if(!an.matches("[a-zA-Z\\s]+"))
+            {
+                showDialog("Warning", "Achternaam is foutief ingevoerd");
+                return;
+            }
+            
+            else if (!tv.trim().equals(""))
+            {
+                if(!tv.matches("[a-zA-Z\\s]+"))
+                    {
+                        showDialog("Warning", "Tussenvoegsel is foutief ingevoerd");
+                        return;
+                    }
+            }
+        }
+            
+        if (!wp.matches("[a-zA-Z\\s]+"))
+        {
+            showDialog("Warning", "Woonplaats is foutief ingevoerd");
+            return;
+        }
+            
+        
         
         Calendar c = Calendar.getInstance();
         DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
