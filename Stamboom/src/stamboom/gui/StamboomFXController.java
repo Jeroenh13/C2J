@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -147,12 +148,28 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     public void selectGezin(Event evt) {
         // todo opgave 3
+        Gezin gezin = (Gezin) cbKiesGezin.getSelectionModel().getSelectedItem();
+        showGezin(gezin);   
 
     }
 
     private void showGezin(Gezin gezin) {
-        // todo opgave 3
-
+        // todo opgave 3    
+        
+        //Calendar naar Datumstring
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date huwelijksDatum = gezin.getHuwelijksdatum().getTime();
+        String huwelijksDatumString = format.format(huwelijksDatum);
+        
+        //ArrayList naar ObservableList
+        ObservableList<Persoon> kindLijst = FXCollections.observableArrayList(gezin.getKinderen());
+        
+        tfGezinNr.setText(Integer.toString(gezin.getNr()));
+        tfGezinOuder1.setText(gezin.getOuder1().getNaam());
+        tfGezinOuder2.setText(gezin.getOuder1().getNaam());       
+        tfGezinHuwelijk.setText(huwelijksDatumString);
+        tfGezinScheiding.setText(StringUtilities.datumString(gezin.getScheidingsdatum()));        
+        lvGezinKinderen.setItems(kindLijst);
     }
 
     public void setHuwdatum(Event evt) {
