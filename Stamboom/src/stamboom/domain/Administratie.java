@@ -141,7 +141,7 @@ public class Administratie {
 
         Gezin gezin = new Gezin(nextGezinsNr, ouder1, ouder2);
         nextGezinsNr++;
-        gezinnen.add(gezin);
+        observableGezinnen.add(gezin);
 
         ouder1.wordtOuderIn(gezin);
         if (ouder2 != null) {
@@ -226,7 +226,7 @@ public class Administratie {
         if(gezinnen.isEmpty())
         {
             hulpgezin = new Gezin(nextGezinsNr, ouder1, ouder2);
-            gezinnen.add(hulpgezin);                
+            observableGezinnen.add(hulpgezin);                
             hulpgezin.setHuwelijk(huwdatum);
             ouder1.wordtOuderIn(hulpgezin);
             ouder2.wordtOuderIn(hulpgezin);
@@ -246,7 +246,7 @@ public class Administratie {
                             if(huwdatum.after(g.getScheidingsdatum()))
                             {
                                 hulpgezin = new Gezin(nextGezinsNr, ouder1, ouder2);
-                                gezinnen.add(hulpgezin);                
+                                observableGezinnen.add(hulpgezin);                
                                 hulpgezin.setHuwelijk(huwdatum);
                                 ouder1.wordtOuderIn(hulpgezin);
                                 ouder2.wordtOuderIn(hulpgezin);
@@ -274,7 +274,7 @@ public class Administratie {
         {
             
             hulpgezin = new Gezin(nextGezinsNr, ouder1, ouder2);
-            gezinnen.add(hulpgezin);  
+            observableGezinnen.add(hulpgezin);  
             if(hulpgezin.setHuwelijk(huwdatum))
             {
                 hulpgezin.setHuwelijk(huwdatum);
