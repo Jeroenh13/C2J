@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -93,11 +94,12 @@ public class StamboomFXController extends StamboomController implements Initiali
     }
 
     private void initComboboxes() {
+        ObservableList personen = getAdministratie().getPersonen();
         cbOuderlijkGezin.setItems(getAdministratie().getGezinnen());
         cbKiesGezin.setItems(getAdministratie().getGezinnen());
-        cbOuder1Invoer.setItems(getAdministratie().getPersonen());
-        cbOuder2Invoer.setItems(getAdministratie().getPersonen());
-        cbPersonen.setItems(getAdministratie().getPersonen());
+        cbOuder1Invoer.setItems(personen);
+        cbOuder2Invoer.setItems(personen);
+        cbPersonen.setItems(personen);
         cbAddOuderlijkGezin.setItems(getAdministratie().getGezinnen());
     }
 
@@ -187,7 +189,6 @@ public class StamboomFXController extends StamboomController implements Initiali
         Gezin g = (Gezin)cbAddOuderlijkGezin.getSelectionModel().getSelectedItem();
         getAdministratie().addPersoon(cbSelected, vnamen, tfAddAchternaam.getText(), tfAddTussenVoegsel.getText(), c, tfAddGebPlaats.getText(), g);        
         clearTabPersoonInvoer();
-        initComboboxes();
     }
     
 
