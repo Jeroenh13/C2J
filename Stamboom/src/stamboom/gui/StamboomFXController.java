@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -147,12 +148,28 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     public void selectGezin(Event evt) {
         // todo opgave 3
+        Gezin gezin = (Gezin) cbKiesGezin.getSelectionModel().getSelectedItem();
+        showGezin(gezin);   
 
     }
 
     private void showGezin(Gezin gezin) {
-        // todo opgave 3
-
+        // todo opgave 3    
+        
+        //Calendar naar Datumstring
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date huwelijksDatum = gezin.getHuwelijksdatum().getTime();
+        String huwelijksDatumString = format.format(huwelijksDatum);
+        
+        //ArrayList naar ObservableList
+        ObservableList<Persoon> kindLijst = FXCollections.observableArrayList(gezin.getKinderen());
+        
+        tfGezinNr.setText(Integer.toString(gezin.getNr()));
+        tfGezinOuder1.setText(gezin.getOuder1().getNaam());
+        tfGezinOuder2.setText(gezin.getOuder1().getNaam());       
+        tfGezinHuwelijk.setText(huwelijksDatumString);
+        tfGezinScheiding.setText(StringUtilities.datumString(gezin.getScheidingsdatum()));        
+        lvGezinKinderen.setItems(kindLijst);
     }
 
     public void setHuwdatum(Event evt) {
@@ -170,8 +187,56 @@ public class StamboomFXController extends StamboomController implements Initiali
     }
 
     public void okPersoonInvoer(Event evt) {
+        //TODO kalender blabla
         String vn = tfAddVoornamen.getText();
-        String[] vnamen = vn.split("\\s+");
+        String an = tfAddAchternaam.getText();
+        String tv = tfAddTussenVoegsel.getText();
+        String wp = tfAddGebPlaats.getText();
+        String tmpGeslacht;
+        Geslacht cbSelected;
+        String[] vnamen;
+        
+        try
+        {
+            tmpGeslacht = cbAddGeslacht.getValue().toString();
+            cbSelected = Geslacht.valueOf(tmpGeslacht);
+        }
+        catch(Exception e)
+        {
+            showDialog("Warning", "U heeft geen geslacht gekozen");
+            return;
+        }
+        
+        if(!vn.matches("[a-zA-Z\\s]+"))
+        {
+            showDialog("Warning", "Voornaam is foutief ingevoerd");
+            return;
+        }
+        else
+        {
+            vnamen = vn.split("\\s+");
+        }
+        
+        if(!an.matches("[a-zA-Z\\s]+"))
+        {
+            showDialog("Warning", "Achternaam is foutief ingevoerd");
+            return;
+        }
+            
+        if (!tv.trim().equals(""))
+        {
+            if(!tv.matches("[a-zA-Z\\s]+"))
+                {
+                    showDialog("Warning", "Tussenvoegsel is foutief ingevoerd");
+                    return;
+                }
+        }
+            
+        if (!wp.matches("[a-zA-Z\\s]+"))
+        {
+            showDialog("Warning", "Woonplaats is foutief ingevoerd");
+            return;
+        }
         
         Calendar c = Calendar.getInstance();
         DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
@@ -182,8 +247,7 @@ public class StamboomFXController extends StamboomController implements Initiali
             return;
         }
         
-        String tmpGeslacht = cbAddGeslacht.getValue().toString();
-        Geslacht cbSelected = Geslacht.valueOf(tmpGeslacht);
+        
         Gezin g = (Gezin)cbAddOuderlijkGezin.getSelectionModel().getSelectedItem();
         getAdministratie().addPersoon(cbSelected, vnamen, tfAddAchternaam.getText(), tfAddTussenVoegsel.getText(), c, tfAddGebPlaats.getText(), g);        
         clearTabPersoonInvoer();
