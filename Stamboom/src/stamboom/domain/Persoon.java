@@ -1,5 +1,6 @@
 package stamboom.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -9,7 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import stamboom.util.StringUtilities;
 
-public class Persoon {
+public class Persoon implements Serializable{
 
     // ********datavelden**************************************
     private final int nr;
@@ -22,7 +23,7 @@ public class Persoon {
     private final List<Gezin> alsOuderBetrokkenIn;
     private final Geslacht geslacht;
     
-    private ObservableList<Gezin> observableAlsOuderBetrokkenIn;
+    private transient ObservableList<Gezin> observableAlsOuderBetrokkenIn;
     
     // ********constructoren***********************************
     /**
@@ -226,7 +227,7 @@ public class Persoon {
      */
     void wordtOuderIn(Gezin g) {
         if (!alsOuderBetrokkenIn.contains(g)) {
-            alsOuderBetrokkenIn.add(g);
+            observableAlsOuderBetrokkenIn.add(g);
         }
     }
 

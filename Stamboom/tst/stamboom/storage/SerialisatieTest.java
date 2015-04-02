@@ -56,7 +56,6 @@ public class SerialisatieTest extends TestCase {
             fail();
         }
         assertTrue("Serialisatie onjuist (geen data in bestand)", testOpslag.length() > 0);
-
         Administratie adm2;
         try {
             controller.deserialize(testOpslag);
@@ -65,6 +64,7 @@ public class SerialisatieTest extends TestCase {
             fail();
         }
         adm2 = controller.getAdministratie();
+                
         assertEquals("aantal personen onjuist", adm.aantalGeregistreerdePersonen(), adm2.aantalGeregistreerdePersonen());
         assertEquals("aantal gezinnen onjuist", adm.aantalGeregistreerdeGezinnen(), adm2.aantalGeregistreerdeGezinnen());
 

@@ -1,7 +1,11 @@
 package stamboom.console;
 
+import java.io.File;
+import java.io.IOException;
 import stamboom.domain.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import stamboom.util.StringUtilities;
 import stamboom.controller.StamboomController;
 
@@ -40,6 +44,15 @@ public class StamboomConsole {
                     break;
                 case SHOW_GEZIN:
                     toonGezinsgegevens();
+                    break;
+                case SAVE_BESTAND:
+                    saveAdmin();
+                    break;
+                case LOAD_BESTAND:
+                    loadAdmin();
+                    break;
+                case SHOW_STAMBOOM:
+                    showStamboom();
                     break;
             }
             choice = kiesMenuItem();
@@ -259,5 +272,29 @@ public class StamboomConsole {
 
         StamboomConsole console = new StamboomConsole(controller);
         //console.startMenu();
+    }
+
+    private void saveAdmin() {
+        try
+        {
+            controller.serialize(new File("file"));
+        } catch (IOException ex) {
+            Logger.getLogger(StamboomConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void loadAdmin() {
+         try
+        {
+            controller.deserialize(new File("file"));
+        } catch (IOException ex) {
+            Logger.getLogger(StamboomConsole.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void showStamboom() {
+         Persoon p = selecteerPersoon();
+         System.out.println("Stamboom van:" + p.getNaam());
+         System.out.println(p.stamboomAlsString());
     }
 }

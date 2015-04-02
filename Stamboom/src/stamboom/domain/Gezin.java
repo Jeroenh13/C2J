@@ -1,5 +1,6 @@
 package stamboom.domain;
 
+import java.io.Serializable;
 import java.util.*;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -7,7 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import stamboom.util.StringUtilities;
 
-public class Gezin {
+public class Gezin implements Serializable{
 
     // *********datavelden*************************************
     private final int nr;
@@ -15,7 +16,7 @@ public class Gezin {
     private final Persoon ouder2;
     private final List<Persoon> kinderen;
     
-    private ObservableList<Persoon> observableKinderen;
+    private transient ObservableList<Persoon> observableKinderen;
     /**
      * kan onbekend zijn (dan is het een ongehuwd gezin):
      */
@@ -243,7 +244,7 @@ public class Gezin {
      */
     void breidUitMet(Persoon kind) {
         if (!kinderen.contains(kind) && !this.isFamilieVan(kind)) {
-            kinderen.add(kind);
+            observableKinderen.add(kind);
         }
     }
 

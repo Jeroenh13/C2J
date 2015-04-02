@@ -34,21 +34,22 @@ public class SerializationMediator implements IStorageMediator {
 
     @Override
     public Administratie load() throws IOException {
-        Administratie a = new Administratie();
+        Administratie a = null;
         if (!isCorrectlyConfigured()) {
             throw new RuntimeException("Serialization mediator isn't initialized correctly.");
-        } 
-        else {
-            FileInputStream fis = new FileInputStream(props.getProperty("file"));
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            try {
-                a = (Administratie) ois.readObject();
-            } 
-            catch (ClassNotFoundException ex) {
-                Logger.getLogger(SerializationMediator.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
-        // todo opgave 2
+        FileInputStream fis = new FileInputStream((File) props.get("file"));
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        try {
+            a = (Administratie) ois.readObject();
+            a.InitObservables();
+            ois.close();
+            fis.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SerializationMediator.class.getName()).log(Level.SEVERE, null, ex);
+
+            // todo opgave 2
+        }
         return a;
     }
 
@@ -57,7 +58,17 @@ public class SerializationMediator implements IStorageMediator {
         if (!isCorrectlyConfigured()) {
             throw new RuntimeException("Serialization mediator isn't initialized correctly.");
         }
-
+            try {
+                FileOutputStream fos = new FileOutputStream((File) props.get("file"));
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(admin);
+                System.out.println("DONE");
+                oos.close();
+                fos.close();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // todo opgave 2
     }
 
@@ -93,6 +104,6 @@ public class SerializationMediator implements IStorageMediator {
             return false;
         }
         return props.containsKey("file")
-                && props.getProperty("file").contains(File.separator);
+                && props.get("file") instanceof File;
     }
 }
