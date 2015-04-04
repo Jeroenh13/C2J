@@ -1,0 +1,26 @@
+CREATE TABLE `gezinnen` (
+  `gezinsNummer` int(11) NOT NULL,
+  `ouder1` int(11) NOT NULL,
+  `ouder2` int(11) DEFAULT NULL,
+  `huwelijksdatum` varchar(255) DEFAULT NULL,
+  `scheidingsdatum` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`gezinsNummer`),
+  KEY `ouder2_idx` (`ouder2`),
+  KEY `ouder1_idx` (`ouder1`),
+  CONSTRAINT `ouder1` FOREIGN KEY (`ouder1`) REFERENCES `personen` (`persoonsNummer`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `ouder2` FOREIGN KEY (`ouder2`) REFERENCES `personen` (`persoonsNummer`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `personen` (
+  `persoonsNummer` int(11) NOT NULL,
+  `achternaam` varchar(255) NOT NULL,
+  `voornamen` varchar(255) NOT NULL,
+  `tussenvoegsel` varchar(255) NOT NULL,
+  `geboortedatum` varchar(255) NOT NULL,
+  `geboorteplaats` varchar(255) NOT NULL,
+  `geslacht` varchar(255) NOT NULL,
+  `ouders` int(11) DEFAULT NULL,
+  PRIMARY KEY (`persoonsNummer`),
+  KEY `ouders_idx` (`ouders`),
+  CONSTRAINT `ouders` FOREIGN KEY (`ouders`) REFERENCES `gezinnen` (`gezinsNummer`) ON DELETE SET NULL ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
