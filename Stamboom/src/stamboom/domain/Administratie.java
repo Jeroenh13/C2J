@@ -380,6 +380,7 @@ public final class Administratie implements Serializable {
     public Gezin getGezin(int gezinsNr) {
         // aanname: er worden geen gezinnen verwijderd
         if (1 <= gezinsNr && 1 <= gezinnen.size()) {
+            //check erin gedaan voor als de array kleiner is als het nummer
             if(gezinnen.size() < gezinsNr)
             {
                 return null;

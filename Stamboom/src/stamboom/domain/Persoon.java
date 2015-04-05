@@ -406,15 +406,15 @@ public class Persoon implements Serializable{
         StringBuilder builder = new StringBuilder();
         ArrayList<PersoonMetGeneratie> lijst = new ArrayList<>();
         voegJouwStamboomToe(lijst,0);
-        for(PersoonMetGeneratie pgm : lijst)
+        for(PersoonMetGeneratie pmg : lijst)
         {
             int i = 0;
-            while(i<pgm.getGeneratie())
+            while(i<pmg.getGeneratie())
             {
                 builder = builder.append("  ");
                 i++;
             }
-            builder = builder.append(pgm.getPersoonsgegevens()).append("\r\n");
+            builder = builder.append(pmg.getPersoonsgegevens()).append("\r\n");
         }
         //todo opgave 2
 
