@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 import stamboom.controller.StamboomController;
 import stamboom.domain.Geslacht;
 import stamboom.domain.Gezin;
@@ -125,7 +127,7 @@ public class StamboomFXController extends StamboomController implements Initiali
             }
 
             //todo opgave 3
-            //lvAlsOuderBetrokkenBij.setItems(persoon.getAlsOuderBetrokkenIn());
+            lvAlsOuderBetrokkenBij.setItems(persoon.getAlsOuderBetrokkenIn());
         }
     }
 
@@ -187,7 +189,6 @@ public class StamboomFXController extends StamboomController implements Initiali
     }
 
     public void okPersoonInvoer(Event evt) {
-        //TODO kalender blabla
         String vn = tfAddVoornamen.getText();
         String an = tfAddAchternaam.getText();
         String tv = tfAddTussenVoegsel.getText();
@@ -239,17 +240,16 @@ public class StamboomFXController extends StamboomController implements Initiali
         }
         
         Calendar c = Calendar.getInstance();
-        DateFormat df = new SimpleDateFormat("dd-mm-yyyy");
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         try {
             c.setTime(df.parse(tfAddGebDatum.getText()));
         } catch (ParseException ex) {
-            showDialog("Warning", "Datum is foutief");
+            showDialog("Warning", "Datum is foutief ingevoerd");
             return;
-        }
-        
+        }       
         
         Gezin g = (Gezin)cbAddOuderlijkGezin.getSelectionModel().getSelectedItem();
-        getAdministratie().addPersoon(cbSelected, vnamen, tfAddAchternaam.getText(), tfAddTussenVoegsel.getText(), c, tfAddGebPlaats.getText(), g);        
+        getAdministratie().addPersoon(cbSelected, vnamen, an, tv, c, wp, g);        
         clearTabPersoonInvoer();
     }
     
@@ -299,7 +299,10 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     
     public void showStamboom(Event evt) {
-        // todo opgave 3
+        String s = tfPersoonNr.getText();
+        int i = Integer.parseInt(s);
+        String stamboom = getAdministratie().getPersoon(i).stamboomAlsString();
+        showDialog("Stamboom", stamboom);
         
     }
 
@@ -312,6 +315,7 @@ public class StamboomFXController extends StamboomController implements Initiali
     
     public void openStamboom(Event evt) {
         // todo opgave 3
+        
        
     }
 
