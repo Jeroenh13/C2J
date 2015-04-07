@@ -290,6 +290,7 @@ public class StamboomFXController extends StamboomController implements Initiali
                 showDialog("Warning", "Invoer ongehuwd gezin is niet geaccepteerd");
             }
         }
+        
         clearTabGezinInvoer();
     }
 
@@ -370,7 +371,10 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     
     private void clearTabGezinInvoer() {
-        //todo opgave 3
+        cbOuder1Invoer.getSelectionModel().clearSelection();
+        cbOuder2Invoer.getSelectionModel().clearSelection();
+        tfHuwelijkInvoer.clear();
+        tfScheidingInvoer.clear();   
     
     }
 
@@ -389,8 +393,7 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     
     private void clearTabGezin() {
-        // todo opgave 3
-       
+            
     }
 
     private void showDialog(String type, String message) {
