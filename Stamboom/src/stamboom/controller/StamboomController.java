@@ -5,9 +5,11 @@
 package stamboom.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 import stamboom.domain.Administratie;
+import stamboom.storage.DatabaseMediator;
 import stamboom.storage.IStorageMediator;
 import stamboom.storage.SerializationMediator;
 
@@ -44,7 +46,7 @@ public class StamboomController {
      */
     public void serialize(File bestand) throws IOException {
         Properties props = new Properties();
-        props.put("file",bestand);
+        props.put("file", bestand);
         storageMediator = new SerializationMediator();
         storageMediator.configure(props);
         storageMediator.save(admin);
@@ -58,35 +60,37 @@ public class StamboomController {
      */
     public void deserialize(File bestand) throws IOException {
         Properties props = new Properties();
-        props.put("file",bestand);
+        props.put("file", bestand);
         storageMediator = new SerializationMediator();
         storageMediator.configure(props);
-        try
-        {
-        admin = storageMediator.load();
+        try {
+            admin = storageMediator.load();
+        } catch (IOException e) {
+            throw new IOException(e);
         }
-        catch(IOException e){throw new IOException(e);}
-        //todo opgave 2
-  
+            //todo opgave 2
+
     }
-    
+
     // opgave 4
     private void initDatabaseMedium() throws IOException {
-//        if (!(storageMediator instanceof DatabaseMediator)) {
-//            Properties props = new Properties();
-//            try (FileInputStream in = new FileInputStream("database.properties")) {
-//                props.load(in);
-//            }
-//            storageMediator = new DatabaseMediator(props);
-//        }
+        if (!(storageMediator instanceof DatabaseMediator)) {
+            Properties props = new Properties();
+            try (FileInputStream in = new FileInputStream("database.properties")) {
+                props.load(in);
+            }
+            storageMediator = new DatabaseMediator(props);
+        }
     }
-    
+
     /**
      * administratie wordt vanuit standaarddatabase opgehaald
      *
      * @throws IOException
      */
     public void loadFromDatabase() throws IOException {
+        initDatabaseMedium();
+        admin = storageMediator.load();
         //todo opgave 4
     }
 
@@ -96,6 +100,7 @@ public class StamboomController {
      * @throws IOException
      */
     public void saveToDatabase() throws IOException {
-        //todo opgave 4
+        initDatabaseMedium();
+        storageMediator.save(admin);
     }
 }

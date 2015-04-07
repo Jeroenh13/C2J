@@ -115,7 +115,7 @@
                                 <items>
                                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                                        <top>
-                                          <ComboBox fx:id="cbKiesGezin" prefHeight="25.0" prefWidth="269.0" promptText="kies gezin" BorderPane.alignment="CENTER">
+                                          <ComboBox fx:id="cbKiesGezin" onAction="#selectGezin" prefHeight="25.0" prefWidth="269.0" promptText="kies gezin" BorderPane.alignment="CENTER">
                                              <items>
                                                 <FXCollections fx:factory="observableArrayList">
                                                     <String fx:value="Item 1" />
@@ -168,7 +168,7 @@
                                                       <Insets right="5.0" />
                                                    </GridPane.margin>
                                                 </Label>
-                                                <Label text="Scheiding" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                                                <Label text="Scheiding" GridPane.halignment="RIGHT" GridPane.rowIndex="4" >
                                                    <GridPane.margin>
                                                       <Insets right="5.0" />
                                                    </GridPane.margin>
@@ -181,8 +181,8 @@
                                                 <TextField fx:id="tfGezinNr" GridPane.columnIndex="1" />
                                                 <TextField fx:id="tfGezinOuder1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                 <TextField fx:id="tfGezinOuder2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <TextField fx:id="tfGezinHuwelijk" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                                <TextField fx:id="tfGezinScheiding" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                                <TextField fx:id="tfGezinHuwelijk" GridPane.columnIndex="1" GridPane.rowIndex="3" onAction="#setHuwdatum" />
+                                                <TextField fx:id="tfGezinScheiding" GridPane.columnIndex="1" GridPane.rowIndex="4" onAction="#setScheidingsdatum" />
                                                 <ListView fx:id="lvGezinKinderen" prefHeight="112.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                              </children>
                                           </GridPane>
@@ -282,7 +282,7 @@
                                                     <children>
                                                         <GridPane alignment="CENTER" hgap="4.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
                                                             <children>
-                                                                <TextField fx:id="tfScheidingInvoer" onAction="#setScheidingsdatum" prefHeight="-1.0" promptText="dd-mm-jjjj" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                                <TextField fx:id="tfScheidingInvoer" prefHeight="-1.0" promptText="dd-mm-jjjj" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                                                 <Label alignment="CENTER_RIGHT" prefHeight="-1.0" prefWidth="-1.0" text="Scheiding op" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x3" GridPane.rowIndex="3" />
                                                                 <TextField fx:id="tfHuwelijkInvoer" prefHeight="-1.0" promptText="dd-mm-jjjj" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                                 <ComboBox fx:id="cbOuder2Invoer" prefHeight="-1.0" prefWidth="400.0" promptText="kies (zo mogelijk) 2e ouder" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -354,7 +354,7 @@
                                 <MenuItem fx:id="miOpen" mnemonicParsing="false" onAction="#openStamboom" text="Open" />
                                 <MenuItem fx:id="miSave" mnemonicParsing="false" onAction="#saveStamboom" text="Save" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
-                                <CheckMenuItem fx:id="cmDatabase" disable="true" mnemonicParsing="false" onAction="#configureStorage" text="Database" />
+                                <CheckMenuItem fx:id="cmDatabase" disable="false" mnemonicParsing="false" onAction="#configureStorage" text="Database" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
                                 <MenuItem fx:id="miClose" mnemonicParsing="false" onAction="#closeApplication" text="Close" />
                             </items>

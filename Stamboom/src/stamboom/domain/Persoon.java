@@ -1,5 +1,7 @@
 package stamboom.domain;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,7 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import stamboom.util.StringUtilities;
 
-public class Persoon implements Serializable{
+public class Persoon implements Serializable {
 
     // ********datavelden**************************************
     private final int nr;
@@ -22,9 +24,9 @@ public class Persoon implements Serializable{
     private Gezin ouderlijkGezin;
     private final List<Gezin> alsOuderBetrokkenIn;
     private final Geslacht geslacht;
-    
+
     private transient ObservableList<Gezin> observableAlsOuderBetrokkenIn;
-    
+
     // ********constructoren***********************************
     /**
      * er wordt een persoon gecreeerd met persoonsnummer persNr en met als
@@ -39,8 +41,7 @@ public class Persoon implements Serializable{
     Persoon(int persNr, String[] vnamen, String anaam, String tvoegsel,
             Calendar gebdat, String gebplaats, Geslacht g, Gezin ouderlijkGezin) {
         nr = persNr;
-        for(int i = 0; i < vnamen.length; i++)
-        {
+        for (int i = 0; i < vnamen.length; i++) {
             vnamen[i] = StringUtilities.withFirstCapital(vnamen[i]).trim();
         }
         voornamen = vnamen;
@@ -49,12 +50,18 @@ public class Persoon implements Serializable{
         gebDat = gebdat;
         gebPlaats = StringUtilities.withFirstCapital(gebplaats).trim();
         geslacht = g;
-        this.ouderlijkGezin = ouderlijkGezin; 
+        this.ouderlijkGezin = ouderlijkGezin;
         alsOuderBetrokkenIn = new ArrayList<>();
         observableAlsOuderBetrokkenIn = FXCollections.observableList(alsOuderBetrokkenIn);
     }
 
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        observableAlsOuderBetrokkenIn = FXCollections.observableList(alsOuderBetrokkenIn);
+    }
+
     // ********methoden****************************************
+
     /**
      * @return de achternaam van deze persoon
      */
@@ -107,12 +114,9 @@ public class Persoon implements Serializable{
     public String getNaam() {
         StringBuilder naam = new StringBuilder();
         naam.append(getInitialen());
-        if(tussenvoegsel.equals(""))
-        {
+        if (tussenvoegsel.equals("")) {
             naam.append(tussenvoegsel).append(' ').append(achternaam);
-        }
-        else
-        {
+        } else {
             naam.append(' ').append(tussenvoegsel).append(' ').append(achternaam);
         }
         return naam.toString();
@@ -180,13 +184,11 @@ public class Persoon implements Serializable{
      * @return of ouderlijk gezin kon worden toegevoegd
      */
     boolean setOuders(Gezin ouderlijkGezin) {
-        if(this.ouderlijkGezin == null)
-        {
+        if (this.ouderlijkGezin == null) {
             this.ouderlijkGezin = ouderlijkGezin;
             this.ouderlijkGezin.breidUitMet(this);
             return true;
-        }else
-        {
+        } else {
             return false;
         }
     }
@@ -240,17 +242,12 @@ public class Persoon implements Serializable{
      */
     public Gezin heeftOngehuwdGezinMet(Persoon andereOuder) {
         Gezin gezin = null;
-        for(Gezin g : alsOuderBetrokkenIn)
-        {
-            if(g.getOuder2() == andereOuder || g.getOuder1() == andereOuder)
-            {
-                if(g.isOngehuwd())
-                {
+        for (Gezin g : alsOuderBetrokkenIn) {
+            if (g.getOuder2() == andereOuder || g.getOuder1() == andereOuder) {
+                if (g.isOngehuwd()) {
                     gezin = g;
                 }
-            }
-            else
-            {
+            } else {
                 gezin = null;
             }
         }
@@ -263,8 +260,7 @@ public class Persoon implements Serializable{
      * @return true als persoon op datum getrouwd is, anders false
      */
     public boolean isGetrouwdOp(Calendar datum) {
-        if(alsOuderBetrokkenIn.isEmpty())
-        {
+        if (alsOuderBetrokkenIn.isEmpty()) {
             return false;
         }
         for (Gezin gezin : alsOuderBetrokkenIn) {
@@ -279,13 +275,13 @@ public class Persoon implements Serializable{
      *
      * @param datum
      * @return true als de persoon kan trouwen op datum, hierbij wordt rekening
-     * gehouden met huwelijken in het verleden en in de toekomst
-     * Alleen meerderjarige (18+) personen kunnen trouwen.
+     * gehouden met huwelijken in het verleden en in de toekomst Alleen
+     * meerderjarige (18+) personen kunnen trouwen.
      */
     public boolean kanTrouwenOp(Calendar datum) {
-        Calendar meerderjarigDatum = ((GregorianCalendar)this.gebDat.clone());
+        Calendar meerderjarigDatum = ((GregorianCalendar) this.gebDat.clone());
         meerderjarigDatum.add(Calendar.YEAR, 18);
-        if(datum.compareTo(meerderjarigDatum) < 1){
+        if (datum.compareTo(meerderjarigDatum) < 1) {
             return false;
         }
 
@@ -308,10 +304,8 @@ public class Persoon implements Serializable{
      * @return true als persoon op datum gescheiden is, anders false
      */
     public boolean isGescheidenOp(Calendar datum) {
-        for(Gezin g : alsOuderBetrokkenIn)
-        {
-            if(g.heeftGescheidenOudersOp(datum))
-            {
+        for (Gezin g : alsOuderBetrokkenIn) {
+            if (g.heeftGescheidenOudersOp(datum)) {
                 return true;
             }
         }
@@ -331,27 +325,25 @@ public class Persoon implements Serializable{
         int stamboomgrootte = 1;
         int ouder1 = 0;
         int ouder2 = 0;
-        if(oudersBekend(this))
-        {
-            if(this.ouderlijkGezin.getOuder2()!= null)
-            {
-               ouder2 = this.ouderlijkGezin.getOuder2().afmetingStamboom();
+        if (oudersBekend(this)) {
+            if (this.ouderlijkGezin.getOuder2() != null) {
+                ouder2 = this.ouderlijkGezin.getOuder2().afmetingStamboom();
             }
             ouder1 = this.ouderlijkGezin.getOuder1().afmetingStamboom();
         }
         stamboomgrootte = stamboomgrootte + ouder1 + ouder2;
-        
+
         return stamboomgrootte;
     }
-    
+
     /**
      * returnt true als het ouderlijk gezin bekend is
+     *
      * @param p de persoon
-     * @return 
+     * @return
      */
-    boolean oudersBekend(Persoon p)
-    {
-        return p.getOuderlijkGezin()!= null;
+    boolean oudersBekend(Persoon p) {
+        return p.getOuderlijkGezin() != null;
     }
 
     /**
@@ -369,12 +361,10 @@ public class Persoon implements Serializable{
     void voegJouwStamboomToe(ArrayList<PersoonMetGeneratie> lijst, int g) {
         //todo opgave 2
         lijst.add(new PersoonMetGeneratie(this.standaardgegevens(), g));
-        if(oudersBekend(this))
-        {
-            this.ouderlijkGezin.getOuder1().voegJouwStamboomToe(lijst, g+1);
-            if(this.ouderlijkGezin.getOuder2()!= null)
-            {
-                this.ouderlijkGezin.getOuder2().voegJouwStamboomToe(lijst, g+1);
+        if (oudersBekend(this)) {
+            this.ouderlijkGezin.getOuder1().voegJouwStamboomToe(lijst, g + 1);
+            if (this.ouderlijkGezin.getOuder2() != null) {
+                this.ouderlijkGezin.getOuder2().voegJouwStamboomToe(lijst, g + 1);
             }
         }
     }
@@ -401,16 +391,14 @@ public class Persoon implements Serializable{
      * __J.A. Pieterse (MAN) 23-6-1964<br>
      * ____M.A.C. Hagel (VROUW) 12-0-1943<br>
      * ____J.A. Pieterse (MAN) 4-8-1923<br>
-     */    
+     */
     public String stamboomAlsString() {
         StringBuilder builder = new StringBuilder();
         ArrayList<PersoonMetGeneratie> lijst = new ArrayList<>();
-        voegJouwStamboomToe(lijst,0);
-        for(PersoonMetGeneratie pmg : lijst)
-        {
+        voegJouwStamboomToe(lijst, 0);
+        for (PersoonMetGeneratie pmg : lijst) {
             int i = 0;
-            while(i<pmg.getGeneratie())
-            {
+            while (i < pmg.getGeneratie()) {
                 builder = builder.append("  ");
                 i++;
             }

@@ -222,30 +222,31 @@ public final class Administratie implements Serializable {
             hulpgezin.setHuwelijk(huwdatum);
             ouder1.wordtOuderIn(hulpgezin);
             ouder2.wordtOuderIn(hulpgezin);
-
             nextGezinsNr++;
         } else {
             for (Gezin g : gezinnen) {
                 if ((g.getOuder1() == ouder1 || g.getOuder1() == ouder2) || (g.getOuder2() == ouder1 || g.getOuder2() == ouder2)) {
-                    if (!g.isOngehuwd()) {
-                        if (g.getScheidingsdatum() != null) {
-                            if (huwdatum.after(g.getScheidingsdatum())) {
-                                hulpgezin = new Gezin(nextGezinsNr, ouder1, ouder2);
-                                observableGezinnen.add(hulpgezin);
-                                hulpgezin.setHuwelijk(huwdatum);
-                                ouder1.wordtOuderIn(hulpgezin);
-                                ouder2.wordtOuderIn(hulpgezin);
-
-                                nextGezinsNr++;
-                                return hulpgezin;
+                    if (g.getOuder1().isGescheidenOp(huwdatum) || g.getOuder2().isGescheidenOp(huwdatum)) {
+                        if (!g.isOngehuwd()) {
+                            if (g.getScheidingsdatum() != null) {
+                                if (huwdatum.after(g.getScheidingsdatum())) {
+                                    hulpgezin = new Gezin(nextGezinsNr, ouder1, ouder2);
+                                    observableGezinnen.add(hulpgezin);
+                                    hulpgezin.setHuwelijk(huwdatum);
+                                    ouder1.wordtOuderIn(hulpgezin);
+                                    ouder2.wordtOuderIn(hulpgezin);
+                                    nextGezinsNr++;
+                                    return hulpgezin;
+                                }
+                                hulpgezin = null;
+                                bestaat = true;
+                            } else {
+                                hulpgezin = null;
+                                bestaat = true;
                             }
-                            hulpgezin = null;
-                            bestaat = true;
-                        } else {
-                            hulpgezin = null;
-                            bestaat = true;
                         }
                     }
+                    bestaat = true;
                     if ((g.getOuder1() == ouder1 || g.getOuder1() == ouder2) && (g.getOuder2() == ouder1 || g.getOuder2() == ouder2) && (g.isOngehuwd())) {
                         g.setHuwelijk(huwdatum);
                         hulpgezin = g;
@@ -254,7 +255,6 @@ public final class Administratie implements Serializable {
             }
         }
         if (hulpgezin == null && bestaat == false) {
-
             hulpgezin = new Gezin(nextGezinsNr, ouder1, ouder2);
             observableGezinnen.add(hulpgezin);
             if (hulpgezin.setHuwelijk(huwdatum)) {
@@ -381,20 +381,19 @@ public final class Administratie implements Serializable {
         // aanname: er worden geen gezinnen verwijderd
         if (1 <= gezinsNr && 1 <= gezinnen.size()) {
             //check erin gedaan voor als de array kleiner is als het nummer
-            if(gezinnen.size() < gezinsNr)
-            {
+            if (gezinnen.size() < gezinsNr) {
                 return null;
             }
             return gezinnen.get(gezinsNr - 1);
         }
         /*
-        if (gezinnen != null) {
-            if (gezinsNr == gezinnen.size()) {
-                return null;
-            } else {
-                return gezinnen.get(gezinsNr - 1);
-            }
-        }*/
+         if (gezinnen != null) {
+         if (gezinsNr == gezinnen.size()) {
+         return null;
+         } else {
+         return gezinnen.get(gezinsNr - 1);
+         }
+         }*/
         return null;
     }
 }
