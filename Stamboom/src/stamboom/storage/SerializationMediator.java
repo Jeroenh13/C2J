@@ -47,8 +47,6 @@ public class SerializationMediator implements IStorageMediator {
             fis.close();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SerializationMediator.class.getName()).log(Level.SEVERE, null, ex);
-
-            // todo opgave 2
         }
         return a;
     }
@@ -69,7 +67,6 @@ public class SerializationMediator implements IStorageMediator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // todo opgave 2
     }
 
     /**
